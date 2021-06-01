@@ -1,12 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    function replaceArray(array){
-        if (Array.isArray(array)){
-            for (let i = 0, c = Array(array.length); i < array.length; i++)
-            c[i] = array[i]
-            return c
-        }
-        return Array.from(array)
-    }
     const playing = !0
     const timer = function() {
         return setInterval(function (){
@@ -32,20 +24,25 @@ document.addEventListener("DOMContentLoaded", () => {
         const counterNum = parseInt(counterElement.innerText)
         counterElement.innerText = counterNum + 1
     })
+    let secondsArray = []
     heart.addEventListener("click", function(){
         let counterElement = document.getElementById('counter')
         const counterNum = parseInt(counterElement.innerText)
         const likes = document.querySelector('.likes')
-        let commentLikes = void 0
-        if([].concat(replaceArray(likes.children)).map(function(counterElement){
-            return parseInt(counterElement.dataset.num)
-        }).includes(counterNum)){
-            commentLikes = document.querySelector('[data-num="'+counterNum+'"]')
-            const numOfLikes = parseInt(commentLikes.children[0].innerText)
-            commentLikes.innerHTML = `${counterNum} has been liked <span>
-            ${numOfLikes + 1}</span> times`
-        } else (commentLikes = document.createElement("li")).setAttribute("data-num"
-        , counterNum), commentLikes.innerHTML = `${counterNum} has been liked <span>1</span> time`,
-        likes.appendChild(commentLikes)
+
+        console.log(secondsArray)
+        if (secondsArray.includes(counterNum)){
+            secondsArray.push(counterNum)
+            const times = secondsArray.filter( (a) => a === counterNum)
+            const likesElement = document.getElementById(`${counterNum}`)
+            likesElement.innerHTML = `${counterNum} has been liked ${times.length} times.`
+            console.log(times)
+        } else {
+            const likesElement = document.createElement('li')
+            likesElement.id = `${counterNum}`
+            likesElement.innerHTML = `${counterNum} has been liked 1 time.`
+            secondsArray.push(counterNum)
+            likes.append(likesElement)
+        }
     })
 })
